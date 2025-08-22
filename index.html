@@ -101,6 +101,22 @@
       width: 100%;
     }
 
+    /* Hamburger menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background: #fff;
+      margin: 3px 0;
+      transition: all 0.3s ease;
+    }
+
     /* Hero section */
     .hero {
       text-align: center;
@@ -189,20 +205,43 @@
     }
 
     /* Responsive design */
+    @media (max-width: 968px) {
+      nav ul {
+        gap: 15px;
+      }
+      
+      nav a {
+        font-size: 14px;
+      }
+    }
+
     @media (max-width: 768px) {
       .container {
         padding: 0 20px;
       }
 
-      header {
-        flex-direction: column;
-        gap: 20px;
+      .hamburger {
+        display: flex;
       }
 
       nav ul {
-        gap: 15px;
-        flex-wrap: wrap;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 70%;
+        flex-direction: column;
+        background: rgba(15, 32, 39, 0.95);
+        backdrop-filter: blur(10px);
         justify-content: center;
+        align-items: center;
+        transition: right 0.5s ease;
+        z-index: 99;
+        gap: 30px;
+      }
+
+      nav ul.active {
+        right: 0;
       }
 
       .hero h1 {
@@ -212,6 +251,19 @@
       .floating-content {
         padding: 30px 20px;
       }
+    }
+
+    /* Mobile navigation toggle animation */
+    .hamburger.toggle div:nth-child(1) {
+      transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .hamburger.toggle div:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.toggle div:nth-child(3) {
+      transform: rotate(45deg) translate(-5px, -6px);
     }
   </style>
 </head>
@@ -229,6 +281,11 @@
           <li><a href="#">Sponsors</a></li>
         </ul>
       </nav>
+      <div class="hamburger">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </header>
 
     <div class="floating-content">
@@ -246,16 +303,19 @@
           <i class="fas fa-crown"></i>
           <h3>About Our CEO</h3>
           <p>Learn about the visionary leader who started it all and continues to inspire our team.</p>
+          <a href="#" class="btn">Read More</a>
         </div>
         <div class="feature-card">
           <i class="fas fa-images"></i>
           <h3>Best Memories</h3>
           <p>Take a journey through our most cherished moments and accomplishments.</p>
+          <a href="#" class="btn">View Gallery</a>
         </div>
         <div class="feature-card">
           <i class="fas fa-users"></i>
           <h3>Our Team</h3>
           <p>Meet the talented individuals who make everything possible with their dedication.</p>
+          <a href="#" class="btn">Meet Us</a>
         </div>
       </section>
     </div>
@@ -266,16 +326,19 @@
           <i class="fas fa-calendar-alt"></i>
           <h3>Book Interview</h3>
           <p>Ready to join our team? Schedule an interview and let's explore opportunities together.</p>
+          <a href="#" class="btn">Schedule Now</a>
         </div>
         <div class="feature-card">
           <i class="fas fa-handshake"></i>
           <h3>Our Sponsors</h3>
           <p>We're grateful to our partners and sponsors who support our mission and vision.</p>
+          <a href="#" class="btn">See Partners</a>
         </div>
         <div class="feature-card">
           <i class="fas fa-envelope"></i>
           <h3>Contact Us</h3>
           <p>Have questions or want to learn more? Get in touch with our team today.</p>
+          <a href="#" class="btn">Send Message</a>
         </div>
       </section>
     </div>
@@ -286,19 +349,39 @@
   </div>
 
   <script>
+    // Hamburger menu functionality
+    const hamburger = document.querySelector('.hamburger');
+    const nav = document.querySelector('nav ul');
+    
+    hamburger.addEventListener('click', () => {
+      nav.classList.toggle('active');
+      hamburger.classList.toggle('toggle');
+    });
+    
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('active');
+        hamburger.classList.remove('toggle');
+      });
+    });
+    
     // Floating scroll animation
     document.addEventListener('DOMContentLoaded', function() {
       const floatingContent = document.querySelectorAll('.floating-content');
+      
       function checkScroll() {
         floatingContent.forEach((element) => {
           const position = element.getBoundingClientRect().top;
           const screenPosition = window.innerHeight / 1.3;
+          
           if (position < screenPosition) {
             element.style.transition = 'transform 0.5s ease, box-shadow 0.5s ease';
             element.style.transform = 'translateY(0)';
           }
         });
       }
+      
       window.addEventListener('scroll', checkScroll);
       checkScroll();
     });
